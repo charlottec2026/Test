@@ -3,8 +3,8 @@
 public class Main {
     public static void main(String[] args) {
 
-        String myFavouriteFood = "pizza";
-        int indexLastChar = myFavouriteFood.length()-1;
-        System.out.println(indexLastChar);
+        int point1 = 5;
+        System.out.println(point1);
+
     }
 }
