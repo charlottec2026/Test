@@ -13,19 +13,21 @@ public class Main {
         System.out.println("This is a program that calculates the amount of taxes, in Hong Kong Dollars, that you must pay. This program will ask you some questions, and your answers to them will determine how much your final taxes are.");
         Scanner scanner = new Scanner(System.in);
         // Opens the portal to execution of the following program.
-        System.out.println("If you would like to begin this program, type 'B' or 'b' and hit enter.");
-        // Blocks against responses which are not "B" or "b".
-        while (!scanner.nextLine().equalsIgnoreCase("b")) {
-            System.out.println("If you would like to begin this program, type 'B' or 'b' and hit enter.");
+        System.out.println("If you would like to begin this program, type '0' and hit enter.");
+        int response = scanner.nextInt();
+        // Blocks against responses which are not "0"
+        while (response != 0) {
+            System.out.println("If you would like to begin this program, type '0' and hit enter.");
+            response = scanner.nextInt();
         }
-        // What happens when "B" or "b" is typed as response to line 14.
+        // What happens when "0" is typed as response to line 14.
         // Asks for first, middle and last name.
         System.out.println("Very well. You will now be asked some questions about yourself.");
         System.out.println("What is your first name?");
         String FName = scanner.nextLine();
-        System.out.println("What is your middle name? If you don't have one, type '0' or 'none'.");
+        System.out.println("What is your middle name? If you don't have one, type '0'.");
         String MName = scanner.nextLine();
-        if (MName.equals("0") || MName.equals("N/A")) {
+        if (MName.equals("0")) {
             MName = "";
         }
         System.out.println("What is your last name?");
@@ -46,6 +48,8 @@ public class Main {
         int income = scanner.nextInt();
         System.out.println("Currently, you make " + income + " dollars per year.");
 
+        System.out.println("Now, you will be asked some questions regarding allowances.");
+
         // Asks for how many children, if any.
         System.out.println("How many children do you have? If you have more than 9, still enter 9.");
         int totalChildren = scanner.nextInt();
@@ -55,8 +59,7 @@ public class Main {
         }
         System.out.println("Of your children, how many were born between April 1st of last year and March 31st of this year?");
         int childrenInYear = scanner.nextInt();
-        allowance += (childrenInYear*260000)+((totalChildren-childrenInYear)*130000);
-        System.out.println("Your allowance currently stands at " + allowance + " dollars.");
+        allowance += (childrenInYear * 260000) + ((totalChildren - childrenInYear) * 130000);
 
         // Asks for dependent brothers and/or sisters.
         System.out.println("How many dependent brothers or sisters are you currently supporting? If you have more than 9, still enter 9.");
@@ -67,19 +70,60 @@ public class Main {
         }
         System.out.println("Of those siblings, how many are eligible for the Disabled Dependent Allowance?");
         int disabledSiblings = scanner.nextInt();
-        allowance += ((dependentSiblings*37500)+(disabledSiblings*75000));
-        System.out.println("Your allowance currently stands at " + allowance + " dollars.");
+        while (disabledSiblings > dependentSiblings) {
+            System.out.println("This is not a possible scenario. Try again.");
+            disabledSiblings = scanner.nextInt();
+        }
+        allowance += ((dependentSiblings * 37500) + (disabledSiblings * 75000));
 
         // Asks for dependent parents and/or grandparents. I simplified this one a bit.
-        System.out.println("How many dependent parents/grandparents do you currently support?");
-        int dependentElders = scanner.nextInt();
-        while (dependentElders > 4) {
-            System.out.println("The maximum is 4. Try again.");
-            dependentElders = scanner.nextInt();
-        }
-        System.out.println("Of those, how many are either above the age of 60 or are eligible for the Disability Allowance Scheme?");
+        System.out.println("Of your dependent parents/grandparents, how many are above the age of 60 or are eligible for the Disability Allowance Scheme?");
         int above60Elders = scanner.nextInt();
-        allowance += ((above60Elders*50000)+(dependentElders-above60Elders)*25000);
-        System.out.println("Your allowance currently stands at " + allowance + " dollars.");
+        while (above60Elders > 4) {
+            System.out.println("This is not a possible scenario. Try again.");
+            above60Elders = scanner.nextInt();
+        }
+        System.out.println("How many of your dependent parents/grandparents who are above the age of 60 and are eligible for DAS live with you?");
+        int eldersLiving = scanner.nextInt();
+        while (eldersLiving > above60Elders) {
+            System.out.println("This is not a possible scenario. Try again.");
+            eldersLiving = scanner.nextInt();
+        }
+        allowance += ((above60Elders * 100000) + (eldersLiving) * 50000);
+
+            // Asks if they are married or not (currently). If they're not, ask them if they're a single parent.
+            System.out.println("If you are currently married, type '1'. If you are separated, divorced, widowed or single, type '0'.");
+            int married = scanner.nextInt();
+            while (married > 1) {
+                System.out.println("Invalid response. Try again.");
+                married = scanner.nextInt();
+            }
+            if (married == 0) {
+                allowance += 132000;
+                System.out.println("Are you a single parent? Type '0' for no and '1' for yes.");
+                int singleParent = scanner.nextInt();
+                while (singleParent > 1) {
+                    System.out.println("Invalid response. Try again.");
+                    singleParent = scanner.nextInt();
+                }
+                if (singleParent == 1) {
+                    allowance += 132000;
+                }
+            }
+            if (married == 1) {
+                allowance += 264000;
+            }
+
+            // Asks regarding personal disability.
+            System.out.println("Are you eligible for a personal disability allowance? If yes, type '1'. If no, type '0'.");
+            int personalDisability = scanner.nextInt();
+            if (personalDisability > 1) {
+                System.out.println("Invalid response. Try again.");
+                personalDisability = scanner.nextInt();
+            }
+            if (personalDisability == 1) {
+                allowance += 75000;
+            }
+            System.out.println("Total allowance: " + allowance);
+        }
     }
-}
