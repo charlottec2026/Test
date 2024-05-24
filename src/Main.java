@@ -48,6 +48,7 @@ public class Main {
         int income = scanner.nextInt();
         System.out.println("Currently, you make " + income + " dollars per year.");
 
+
         System.out.println("Now, you will be asked some questions regarding allowances.");
 
         // Asks for how many children, if any.
@@ -124,6 +125,49 @@ public class Main {
             if (personalDisability == 1) {
                 allowance += 75000;
             }
-            System.out.println("Total allowance: " + allowance);
+            System.out.println("Summary of allowances:");
+            System.out.println("Children: " + totalChildren + "\nChildren born in year: " + childrenInYear + "\nTotal dependent siblings: " + dependentSiblings + "\nDependent siblings which are eligible for the DDA: " + disabledSiblings + "\nDependent parents/grandparents: ");
+
+            // Moves on to deductions.
+            System.out.println("Now, you will be asked some questions about deductions.");
+
+            // Self-education expenses.
+            System.out.println("How much have you and/or your spouse spent on expenses for self-education, to a limit of $100,000? If the amount is more than $100,000, input 100000.");
+            int selfEd = scanner.nextInt();
+            if (selfEd >= 100000) {
+                deduction += 100000;
+            }
+            if (selfEd < 100000) {
+                deduction += selfEd;
+            }
+
+            // Elderly residential care expenses.
+            System.out.println("How much have you and/or your spouse spent on elderly residential care, to a limit of $100,000? If the amount exceeds $100,000, input 100000.");
+            int elderlyExpenses = scanner.nextInt();
+            if (elderlyExpenses >= 100000) {
+                deduction += 100000;
+            }
+            if (elderlyExpenses < 100000) {
+                deduction += elderlyExpenses;
+            }
+            // Home loan interest deductions
+            System.out.println("How much have you and/or your spouse spent on home loan interest, to a limit of $100,000? If the amount exceeds $100,000, input 100000.");
+            int homeInterest = scanner.nextInt();
+            if (homeInterest >= 100000) {
+                deduction += 100000;
+            }
+            if (homeInterest < 100000) {
+                deduction += homeInterest;
+            }
+
+            // Qualifying health insurance premiums (what does that even mean bro)
+            System.out.println("How much have you and/or your spouse spent on qualifying health insurance premiums, to a limit of $8,000? If the amount exceeds $8,000, input 8000.");
+            int QHIP = scanner.nextInt();
+            if (QHIP >= 8000) {
+                deduction += 8000;
+            }
+            if (QHIP < 8000) {
+                deduction += QHIP;
+            }
         }
     }
