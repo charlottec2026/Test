@@ -1,5 +1,9 @@
+import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
-// Cheung, Charlotte
+import java.io.PrintStream;
+
+//a. Cheung, Charlotte
 //b. Started 23rd April 2024, completed
 //c. End of Semester 1 Project
 //d. List of Collaborators and where you got help
@@ -7,7 +11,7 @@ import java.util.Scanner;
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         int allowance = 0;
         int deduction = 0;
         System.out.println("This is a program that calculates the amount of taxes, in Hong Kong Dollars, that you must pay. This program will ask you some questions, and your answers to them will determine how much your final taxes are.");
@@ -80,7 +84,7 @@ public class Main {
         // Asks for dependent parents and/or grandparents. I simplified this one a bit.
         System.out.println("Of your dependent parents/grandparents, how many are above the age of 60 or are eligible for the Disability Allowance Scheme?");
         int above60Elders = scanner.nextInt();
-        while (above60Elders > 4) {
+        while (above60Elders > 6) {
             System.out.println("This is not a possible scenario. Try again.");
             above60Elders = scanner.nextInt();
         }
@@ -118,15 +122,19 @@ public class Main {
             // Asks regarding personal disability.
             System.out.println("Are you eligible for a personal disability allowance? If yes, type '1'. If no, type '0'.");
             int personalDisability = scanner.nextInt();
-            if (personalDisability > 1) {
-                System.out.println("Invalid response. Try again.");
-                personalDisability = scanner.nextInt();
-            }
+            String eligibilityDisable = "";
             if (personalDisability == 1) {
                 allowance += 75000;
+                eligibilityDisable = "yes";
             }
-            System.out.println("Summary of allowances:");
-            System.out.println("Children: " + totalChildren + "\nChildren born in year: " + childrenInYear + "\nTotal dependent siblings: " + dependentSiblings + "\nDependent siblings which are eligible for the DDA: " + disabledSiblings + "\nDependent parents/grandparents: ");
+            if (personalDisability == 0) {
+                eligibilityDisable = "no";
+            }
+            if (personalDisability > 1 || personalDisability < 0) {
+            System.out.println("Invalid response. Try again.");
+            personalDisability = scanner.nextInt();
+        }
+            System.out.println("Total allowance: HK$" + allowance);
 
             // Moves on to deductions.
             System.out.println("Now, you will be asked some questions about deductions.");
@@ -169,5 +177,82 @@ public class Main {
             if (QHIP < 8000) {
                 deduction += QHIP;
             }
+            System.out.println("Total deduction: HK$" + deduction);
+
+            // Net chargeable income calculation
+        int netIncome = income - allowance - deduction;
+        double taxDue = 0;
+        if (netIncome < 0) {
+            netIncome = 0;
+        }
+
+        if (netIncome > 0 && netIncome < 50000) {
+            taxDue = 0.02*netIncome;
+        }
+        if (netIncome > 50000 && netIncome < 100000) {
+            taxDue = 1000+(0.06*(netIncome-50000));
+        }
+        if (netIncome > 100000 && netIncome < 150000) {
+            taxDue = 4000+(0.1*(netIncome-100000));
+        }
+        if (netIncome > 150000 && netIncome < 200000) {
+            taxDue = 9000+(0.14*(netIncome-150000));
+        }
+        if (netIncome > 200000) {
+            taxDue = 16000+(0.17*(netIncome - 200000));
+        }
+        if (netIncome == 0) {
+            taxDue = 0;
+        }
+
+        System.out.println("The total amount of tax due is " + taxDue + " Hong Kong dollars.");
+        PrintStream originalOut = System.out;
+        try {
+            // Create a PrintStream to write to the CSV file
+            PrintStream printStream = new PrintStream(new File("taxInfo.csv"));
+
+            // Redirect the standard output to the PrintStream
+            System.setOut(printStream);
+
+            // Write println commands
+            System.out.println("Full name: " + FName + " " + MName + " " + LName);
+            System.out.println("Age: " + age);
+            System.out.println("Income (in HKD): " + income);
+            System.out.println("Number of dependent children: " + totalChildren);
+            System.out.println("Number of dependent siblings: " + dependentSiblings);
+            System.out.println("Number of dependent parents/grandparents: " + eldersLiving);
+            System.out.println("Eligibility for a personal disability allowance: " + eligibilityDisable);
+            System.out.println("Self-education expenses: HK$" + selfEd);
+            System.out.println("Expenses on elderly residential care: HK$" + elderlyExpenses);
+            System.out.println("Expenses on home loan interest: HK$" + homeInterest);
+            System.out.println("Expenses on qualifying health insurance premiums: HK$" + QHIP);
+            System.out.println("Total allowances: HK$" + allowance);
+            System.out.println("Total deductions: HK$" + deduction);
+            System.out.println("Final tax due: HK$" + taxDue);
+
+            // Close the PrintStream
+            printStream.close();
+
+            // Restore the original standard output
+            System.setOut(originalOut);
+
+            System.out.println("Data saved to taxInfo.csv");
+        }
+        catch (IOException e) {
+            System.out.println("Error writing CSV file: " + e.getMessage());
+        }
+
+        System.out.println("Would you like to continue the program? Type '1' for yes and '0' for no.");
+        int response2 = scanner.nextInt();
+        if (response2 == 0) {
+            System.out.println("The program will now end.");
+        }
+        if (response2 == 1) {
+            System.out.println("The program will now also end, but you can run it again from there.");
+        }
+        while (response2!=0 && response2!=1) {
+            System.out.println("That's not a valid input. Try again.");
+            response2 = scanner.nextInt();
         }
     }
+}
