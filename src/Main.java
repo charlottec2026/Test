@@ -268,12 +268,7 @@ public class Main {
             System.out.println("Error writing CSV file: " + e.getMessage());
         }
 
-        System.out.println("You will now see all your information. Type '0' to continue.");
-        String response2 = scanner.nextLine();
-        while (!response2.equals("o")) {
-            System.out.println("Invalid response. Please try again.");
-            response2 = scanner.nextLine();
-        }
+        System.out.println("You will now see all your information.");
         System.out.println("Full name: " + FName + " " + MName + " " + LName);
         System.out.println("Age: " + ageString);
         System.out.println("Income (in HKD): " + income);
@@ -293,10 +288,6 @@ public class Main {
         System.out.println("Would you like to continue the program? Type '1' for yes and '0' for no.");
         String response3 = scanner.nextLine();
         // Blocks invalid responses
-        while (!response3.equals("0") && !response3.equals("1")) {
-            System.out.println("That's not a valid input. Try again.");
-            response3 = scanner.nextLine();
-        }
         if (response3.equals("0")) {
             // Ends the program
             System.out.println("The program will now end.");
