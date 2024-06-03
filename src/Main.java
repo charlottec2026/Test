@@ -290,17 +290,17 @@ public class Main {
 
         // Asks if the user would like to continue the program.
         System.out.println("Would you like to continue the program? Type '1' for yes and '0' for no.");
-        int response3 = scanner.nextInt();
+        String response3 = scanner.nextLine();
         // Blocks invalid responses
-        while (response3 != 0 && response3 != 1) {
+        while (!response3.equals("0") && !response3.equals("1")) {
             System.out.println("That's not a valid input. Try again.");
-            response3 = scanner.nextInt();
+            response3 = scanner.nextLine();
         }
-        if (response3 == 0) {
+        if (response3.equals("0")) {
             // Ends the program
             System.out.println("The program will now end.");
         }
-        if (response3 == 1) {
+        if (response3.equals("1")) {
             // Ends the program
             System.out.println("The program will now also end, but you can run it again from there.");
         }
