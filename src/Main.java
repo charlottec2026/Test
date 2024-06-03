@@ -201,6 +201,7 @@ public class Main {
             netIncome = 0;
         }
 
+
         // Tower of if statements to calculate tax based on progressive rate (ranges of values)
         // On first $50,000 = 2%
         if (netIncome > 0 && netIncome < 50000) {
@@ -232,7 +233,7 @@ public class Main {
         PrintStream originalOut = System.out;
         try {
             // Create a PrintStream that writes to the CSV file
-            PrintStream printStream = new PrintStream(new File("taxDue.csv"));
+            PrintStream printStream = new PrintStream("taxDue.csv");
 
             // Redirect the standard output to the PrintStream
             System.setOut(printStream);
